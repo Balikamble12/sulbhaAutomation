@@ -18,16 +18,3 @@ Examples:
 |emp|
 |pratibha|
 |Sulbha|
-@Add
-Scenario: user Add New Admin user
-
-Given  user click on admin module
-Given user click on Add
-And user add user role
-And user add emp name
-And user add username
-And user add password
-Then user confirm password
-And user click on Save Button
-
-
