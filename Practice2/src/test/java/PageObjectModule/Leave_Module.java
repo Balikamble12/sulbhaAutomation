@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 
 import AppUtils.Baseclass;
 
@@ -42,12 +43,23 @@ public class Leave_Module {
 	@FindBy(tagName = "td")
 	List<WebElement> columns;
 	
-	@FindBy(name="leaveList[calToDate]")
+	@FindBy(id="calToDate")
 	WebElement calenderleaveEndDateTtextbox;
 	
 	@FindBy(xpath = "//select[contains(@data-handler,\"selectMonth\")]")
 	WebElement SelectLeaveEndMonthDate;
 
+	@FindBy(xpath = "//input[@type=\"checkbox\"][4]")
+	WebElement pendingApprovalcheckbox;
+	
+	@FindBy(xpath = "//input[@type=\"checkbox\"][2]")
+	WebElement RejectedCheckbox;
+	
+	@FindBy(id="leaveList_txtEmployee_empName")
+	WebElement LeaveEmpName;
+	@FindBy(id="leaveList_cmbWithTerminated")
+	WebElement includePastEmpCheckbox;
+	
 	public Leave_Module(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -88,17 +100,54 @@ public class Leave_Module {
 	
 	
 	
+	
+	
 	public void userSelectEndLeaveDate() throws InterruptedException {
-		
+		Thread.sleep(2000);
 		calenderleaveEndDateTtextbox.click();
+		bs.DropdownText(calyear, "2029");
+	bs.DropdownText(SelectLeaveEndMonthDate, "Oct");
+	
+	WebElement table= Table;
+	List<WebElement> rows= Table.findElements(By.tagName("tr"));
+	
+	for(int i=1; i<rows.size(); i++)
+	{
+		List<WebElement> columns= rows.get(i).findElements(By.tagName("td"));
+		
+		for(int j=0; j<columns.size(); j++)
+		{
+			String columntext= columns.get(j).getText();
+			if(columntext.equals("25")) {
+				columns.get(j).click();
+				Thread.sleep(2000);
+			}
+		}
+	}}	
+	
+	public void ValidateOfPendingApprovalcheckbox() throws InterruptedException {
+		Assert.assertTrue(pendingApprovalcheckbox.isSelected());
+		System.out.println("yes it is alrady selected");
+		
+		pendingApprovalcheckbox.click();
 		Thread.sleep(2000);
 		
-		}
-	public void UserSelectLeaveEndMonth1date() {
-	bs.DropdownText(SelectLeaveEndMonthDate, "Oct");
+}
+	
+	public void clickOnRejectedStatus() throws InterruptedException {
+		RejectedCheckbox.click();
+		Thread.sleep(2000);
+	}
+	public void UserSelectLeaveEmpName(String emp) {
+	LeaveEmpName.sendKeys(emp);
+	}
+	
+	public void ClickOnPastEmployees() {
+		includePastEmpCheckbox.click();
 	}
 	
 }
+
 
 	
 	
